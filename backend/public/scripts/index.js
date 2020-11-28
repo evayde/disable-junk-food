@@ -1,15 +1,34 @@
+const { RTCPeerConnection, RTCSessionDescription } = window;
+
+const peerConnection = new RTCPeerConnection();
+
 navigator.getUserMedia(
   { video: true, audio: true },
   (stream) => {
-    const localVideo = document.getElementById("local-video");
-    if (localVideo) {
-      localVideo.srcObject = stream;
-    }
+    stream.getTracks().forEach((track) => {
+      peerConnection.addTrack(track, stream);
+
+      const remoteVideo = document.getElementById("remote-video");
+
+      if (remoteVideo) {
+        remoteVideo.srcObject = stream;
+      }
+    });
   },
   (error) => {
     console.warn(error.message);
   }
 );
+
+async function callUser(socketId) {
+  const offer = await peerConnection.createOffer();
+  await peerConnection.setLocalDescription(new RTCSessionDescription(offer));
+
+  socket.emit("call-user", {
+    offer,
+    to: socketId,
+  });
+}
 
 function updateUserList(socketIds) {
   const activeUserContainer = document.getElementById("active-user-container");
@@ -45,7 +64,19 @@ function createUserItemContainer(socketId) {
   return userContainerEl;
 }
 
-this.io("ws://localhost:5000").on("connection", (socket) => {
+const socketIo = this.io("ws://localhost:5000");
+
+async function callUser(socketId) {
+  const offer = await peerConnection.createOffer();
+  await peerConnection.setLocalDescription(new RTCSessionDescription(offer));
+
+  socket.emit("call-user", {
+    offer,
+    to: socketId,
+  });
+}
+
+socketIo.on("connection", (socket) => {
   const existingSocket = this.activeSockets.find((existingSocket) => existingSocket === socket.id);
 
   if (!existingSocket) {
@@ -69,6 +100,26 @@ this.io("ws://localhost:5000").on("connection", (socket) => {
 
     if (elToRemove) {
       elToRemove.remove();
+    }
+  });
+
+  socket.on("call-made", async (data) => {
+    await peerConnection.setRemoteDescription(new RTCSessionDescription(data.offer));
+    const answer = await peerConnection.createAnswer();
+    await peerConnection.setLocalDescription(new RTCSessionDescription(answer));
+
+    socket.emit("make-answer", {
+      answer,
+      to: data.socket,
+    });
+  });
+
+  socket.on("answer-made", async (data) => {
+    await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
+
+    if (!isAlreadyCalling) {
+      callUser(data.socket);
+      isAlreadyCalling = true;
     }
   });
 });
