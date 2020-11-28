@@ -1,13 +1,5 @@
 # #DisableJunkFood
 
-- First install dependencies `npm i`
-- To run the server: `npm run dev`
-- The client is currently seperate and can be run with `npm start`
-- The main idea was to connect the client later with the express server
-  - Use WebRTC to host a lunch break
-  - Cook for your colleagues / and have a conversation
-  - Eat together and have fun@Work!
-
 ## Challenge@HomeOffice
 
 - no lunch break with colleagues
@@ -29,5 +21,15 @@
 - after cooking you can have a virtual lunch break together
 - you have time to talk about something different than work
 - eating in groups with a maximum of 5 people might be useful
+
+## How it Works
+
+- First install dependencies `npm i`
+- To run the server: `npm run dev`
+- The client is currently seperate and can be run with `npm start`
+- The main idea was to connect the client later with the express server
+  - Use WebRTC to host a lunch break
+  - Cook for your colleagues / and have a conversation
+  - Eat together and have fun@Work!
 
 ## Have fun cooking and eating together!
