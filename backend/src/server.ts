@@ -14,7 +14,6 @@ export class Server {
   constructor() {
     this.initialize();
 
-    this.handleRoutes();
     this.handleSocketConnection();
   }
 
@@ -31,14 +30,9 @@ export class Server {
     this.handleSocketConnection();
   }
 
-  private handleRoutes(): void {
-    this.app.get("/", (req, res) => {
-      res.send(`<h1>Hello World</h1>`);
-    });
-  }
-
   private handleSocketConnection(): void {
     this.io.on("connection", (socket) => {
+      console.log("sb connected");
       const existingSocket = this.activeSockets.find((existingSocket) => existingSocket === socket.id);
 
       if (!existingSocket) {
@@ -57,6 +51,20 @@ export class Server {
         this.activeSockets = this.activeSockets.filter((existingSocket) => existingSocket !== socket.id);
         socket.broadcast.emit("remove-user", {
           socketId: socket.id,
+        });
+      });
+
+      socket.on("call-user", (data: any) => {
+        socket.to(data.to).emit("call-made", {
+          offer: data.offer,
+          socket: socket.id,
+        });
+      });
+
+      socket.on("make-answer", (data: any) => {
+        socket.to(data.to).emit("answer-made", {
+          socket: socket.id,
+          answer: data.answer,
         });
       });
     });
