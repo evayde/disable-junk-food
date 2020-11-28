@@ -1,3 +1,7 @@
-import express from "express";
+import { Server } from "./server";
 
-console.log("foo");
+const server = new Server();
+
+server.listen((port) => {
+  console.log(`Server is listening on all interfaces at port :${port}`);
+});
