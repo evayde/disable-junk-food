@@ -1,5 +1,5 @@
 
-# #DisableJunkFood
+# DisableJunkFood
 
 ## Challenge@HomeOffice
 - no lunch break with colleagues
