@@ -20,7 +20,7 @@ let addFood = () => html`
 `;
 
 let viewFoods = (foodIngredient) => html`
-    <li>
+    <li style="display: block">
         <div class="view">
             <input class="toggle" type="checkbox" />
             <label>${foodIngredient.title}</label>
@@ -32,7 +32,8 @@ let viewFoods = (foodIngredient) => html`
 let app = () => html`
     <section class="disableJunkFoodapp">
         <header class"header">
-            <h1>foods</h1>
+            <h1>Disable Junk Foods</h1>
+            <h3> Food list</h3>
             ${addFood()}
         </header>
 
