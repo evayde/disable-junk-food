@@ -1,0 +1,20 @@
+{
+  "name": "disable-junk-food",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evayde/disable-junk-food.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/evayde/disable-junk-food/issues"
+  },
+  "homepage": "https://github.com/evayde/disable-junk-food#readme"
+}
